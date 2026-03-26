@@ -199,4 +199,110 @@ ps -A → tous les processus
 ps aux → vue complète et détaillée (la plus utilisée)
 
 
+La commande top
+
+La commande top, tout comme ps, permet d’afficher les processus en cours d’exécution, mais avec une fonctionnalité très utile : l’affichage se met à jour automatiquement toutes les quelques secondes.
+
+Par défaut, top trie les processus selon leur utilisation du CPU, ce qui en fait un outil idéal pour identifier rapidement les processus ou utilisateurs qui consomment le plus de ressources système.
+
+🔹 Informations affichées par top
+
+Voici les principales colonnes que vous verrez :
+
+PID : identifiant du processus
+USER : utilisateur propriétaire
+PR : priorité du processus
+NI : valeur nice (priorité ajustée)
+VIRT : mémoire virtuelle totale utilisée
+RES : mémoire physique réellement utilisée
+%CPU : pourcentage d’utilisation du CPU
+%MEM : pourcentage d’utilisation de la mémoire
+COMMAND : commande ayant lancé le processus
+🔹 Trier les processus dans top
+
+Vous pouvez modifier le tri en temps réel :
+
+M → trier par utilisation mémoire
+P → trier par CPU (par défaut)
+R → inverser l’ordre de tri
+< → déplacer la colonne de tri vers la gauche
+> → déplacer la colonne de tri vers la droite
+h → afficher l’aide
+q → quitter top
+🔹 Tuer un processus avec top
+
+La commande top permet aussi de terminer un processus directement :
+
+Appuyez sur k
+Entrez le PID du processus à arrêter
+Validez
+
+👉 Exemple : si un processus (comme dd) utilise 99% du CPU, cela peut indiquer un problème. Vous pouvez alors le stopper en entrant son PID (ex : 8156).
+
+
+
+🔪 Tuer un processus sous Linux avec kill
+
+La commande kill est utilisée pour terminer (tuer) un processus sous Linux.
+
+Si un programme devient totalement bloqué ou ne répond plus, vous pouvez être obligé de le stopper avec cette commande.
+
+🔹 Principe de fonctionnement
+
+La commande kill envoie un signal à un processus (identifié par son PID) pour lui demander d’effectuer une action.
+
+👉 Ces signaux peuvent :
+
+arrêter un processus
+le mettre en pause
+le reprendre
+lui demander de relire sa configuration
+
+Chaque signal est représenté par un numéro.
+
+🔹 Signal par défaut
+
+Si vous ne précisez pas de signal, kill utilise :
+
+SIGTERM (15)
+
+➡️ Ce signal :
+
+demande au processus de se terminer proprement
+lui laisse le temps de fermer ses fichiers
+🔹 Signaux les plus courants
+15 (SIGTERM) → arrêt propre (recommandé)
+9 (SIGKILL) → arrêt forcé immédiat (brutal)
+1 (SIGHUP) → rechargement de la configuration
+STOP / CONT → pause / reprise du processus
+🔹 Exemple concret
+
+Supposons qu’un programme comme dd utilise énormément de CPU et ne répond plus.
+
+1️⃣ Trouver le PID avec top
+top
+
+➡️ Exemple : PID = 13203
+
+2️⃣ Tuer le processus
+
+👉 Arrêt propre :
+
+kill 13203
+
+👉 Arrêt forcé :
+
+kill -9 13203
+⚠️ Bonnes pratiques
+Toujours essayer SIGTERM (15) en premier
+Utiliser SIGKILL (9) uniquement en dernier recours
+Un kill -9 ne permet pas au programme de sauvegarder son état
+
+💡 Résumé :
+
+kill envoie un signal à un processus
+kill PID → arrêt propre
+kill -9 PID → arrêt forcé
+Nécessite de connaître le PID (via ps ou top)
+https://geek-university.com/wp-content/images/linux/list_of_kill_signals.jpg
 
