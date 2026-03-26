@@ -1,0 +1,202 @@
+6.3.1 Points de montage (Mount Points)
+
+Chaque périphérique d’entrée/sortie (I/O) contenant un système de fichiers doit être monté, c’est-à-dire associé à un répertoire. Ce répertoire est appelé point de montage. Les fichiers apparaissent alors dans ce répertoire.
+
+De nos jours, la plupart des distributions Linux disposent d’un répertoire dédié aux points de montage pour les DVD/CD-ROM, les périphériques USB, les disquettes, etc. Cela varie selon la distribution, mais les noms de répertoires typiques sont /mnt, /media, etc.
+
+Vous pouvez vérifier ce qui est actuellement monté en exécutant la commande df dans un terminal (c’est aussi une bonne expérience d’apprentissage sous Linux). Les points de montage y sont listés avec les fichiers /dev.
+De plus, pour lister les fichiers /dev correspondant à tous vos périphériques de stockage (y compris les clés USB et les disques non montés), tapez :
+
+sudo fdisk -l
+
+Pour obtenir des informations plus détaillées, comme les types de systèmes de fichiers, exécutez simplement :
+
+mount
+
+(sans argument).
+
+Les disques durs internes de votre machine, et éventuellement d’autres périphériques, sont montés automatiquement au démarrage. Cela est contrôlé par les entrées du fichier /etc/fstab. Les détails sont avancés, mais même sans tout comprendre, il peut être utile d’y jeter un œil. Voici un exemple de ligne :
+
+/dev/sda3   /usr/home   ext3   defaults   0 2
+
+Ici, /dev/sda3 correspond à la troisième partition (“3”) du premier disque dur SATA (“a”). Cette entrée indique que cette partition contient un système de fichiers de type ext3 et doit être montée dans le répertoire /usr/home. Les autres champs concernent notamment les sauvegardes et les vérifications du système de fichiers.
+
+Lorsque vous connectez un périphérique après le démarrage, le système le reconnaît généralement immédiatement et peut afficher une fenêtre montrant son contenu. En cas de problème, vous pouvez utiliser la commande Unix mount. C’est une commande avancée, mais voici un exemple typique :
+
+mount -t iso9660 /dev/hdc /mnt/yyy
+
+Cela indique à Linux que le périphérique /dev/hdc (ici un CD-ROM) doit être monté dans le répertoire /mnt/yyy. Si ce répertoire n’existe pas, vous devez d’abord le créer avec mkdir. L’option -t iso9660 précise le type de système de fichiers (standard pour les CD-ROM, souvent facultatif).
+
+Pour démonter un périphérique, utilisez :
+
+umount
+
+⚠️ Il est dangereux de retirer un périphérique USB sans l’avoir démonté au préalable.
+
+
+6.3.2 Utilisation des périphériques USB
+
+Les périphériques USB, y compris les clés mémoire, voient normalement leur système de fichiers monté automatiquement lorsque vous les branchez. Utilisez la commande df pour vérifier où ils ont été montés (cela peut être dans les répertoires /mnt, /media, etc.).
+
+Les souris USB deviennent généralement utilisables automatiquement dès leur connexion.
+
+Note :
+Dans certains cas, cela peut ne pas fonctionner. Si la commande fdisk ne reconnaît pas votre périphérique, essayez de consulter le fichier /proc/partitions. Votre périphérique peut y apparaître, par exemple sous le nom sdb1. Vous pouvez alors utiliser la commande mount comme indiqué précédemment, en ciblant /dev/sdb1.
+
+
+B — Qu’est-ce que le partitionnement ?
+
+
+💡 En résumé : le partitionnement consiste à découper un disque en plusieurs espaces indépendants afin d’y installer différents systèmes ou usages.
+
+
+Un disque dur (pas seulement sous Linux) est composé d’une ou plusieurs partitions. Une partition est une portion contiguë d’espace (blocs séquentiels) sur le disque, traitée comme un disque indépendant.
+
+Ainsi, si vous souhaitez utiliser à la fois Windows et Linux (ce qu’on appelle un dual boot, car vous pouvez démarrer sur l’un ou l’autre système), vous aurez besoin d’au moins une partition pour Windows et une (en réalité deux) pour Linux.
+
+🔹 Nom des périphériques sous Linux
+
+Il est important de comprendre le système de nommage :
+
+Sous Linux, tous les périphériques d’entrée/sortie sont considérés comme des fichiers.
+
+Un disque dur IDE : /dev/hda
+Un disque dur SATA : /dev/sda
+Un lecteur CD/DVD : /dev/hdc
+Une clé USB : /dev/sdf1 (par exemple)
+
+Les partitions sont numérotées :
+
+/dev/hda1, /dev/hda2, etc.
+Par exemple, une installation Windows classique se trouve souvent sur /dev/sda1
+🔹 Systèmes de fichiers
+
+À l’intérieur d’une partition se trouve un système de fichiers.
+
+Un disque n’est au départ qu’une suite de données brutes. Le système d’exploitation utilise le système de fichiers pour organiser ces données en fichiers et dossiers.
+
+Exemples :
+
+Windows (XP, Vista) : NTFS
+Linux :
+ext2 (ancien standard)
+ext3 (version améliorée)
+swap (type spécial pour la mémoire virtuelle)
+
+Le swap (type 0x82) est utilisé comme espace temporaire par le système (mémoire virtuelle, veille prolongée). Les partitions Linux classiques sont de type 0x83.
+
+🔹 Types de partitions
+
+À l’origine, les PC étaient limités à 4 partitions principales (primaires).
+
+Pour dépasser cette limite, on a introduit :
+
+les partitions étendues
+les partitions logiques
+
+Il est conseillé (mais pas obligatoire) d’installer Linux sur une partition primaire, notamment pour faciliter la récupération du système.
+
+B.1 Partitionnement avec GParted
+
+Aujourd’hui, la plupart des distributions Linux utilisent un outil de partitionnement automatique lors de l’installation, comme GParted.
+
+Vous pouvez aussi utiliser GParted manuellement via un CD ou une clé USB bootable, mais ici on suppose qu’il est lancé par l’installateur Linux.
+
+Chaque distribution étant légèrement différente, les étapes précises peuvent varier, mais les principes restent les mêmes.
+
+⚠️ Cas d’un dual boot Windows / Linux
+
+Si vous souhaitez conserver Windows :
+
+👉 Lorsque l’installateur demande si vous voulez utiliser tout le disque, répondez NON.
+
+(Sauf si vous voulez supprimer Windows ou utiliser un disque séparé.)
+
+🔧 Étapes principales avec GParted
+
+Voici les étapes générales :
+
+Sélectionner le disque à partitionner (ex : /dev/hda)
+Sélectionner la partition Windows (souvent NTFS et occupant tout le disque)
+Choisir combien d’espace libérer pour Linux
+Réduire (shrink) la partition Windows
+Ajuster la taille selon vos besoins
+Créer une partition Linux principale :
+type ext2 ou ext3
+définie comme bootable
+Créer une petite partition swap :
+utilisée comme mémoire virtuelle
+Appliquer (commit) les modifications :
+cela peut prendre несколько minutes → soyez patient
+Au prochain démarrage de Windows :
+un contrôle du disque sera proposé → acceptez-le impérativement
+
+
+Qu’est-ce qu’un processus ?
+
+Une instance d’un programme en cours d’exécution est appelée un processus. Chaque fois que vous exécutez une commande dans le shell, un programme est lancé et un processus est créé.
+
+Chaque processus sous Linux possède :
+
+un identifiant unique appelé PID (Process ID)
+une association avec un utilisateur et un groupe
+🔹 Multitâche sous Linux
+
+Linux est un système d’exploitation multitâche, ce qui signifie que plusieurs programmes peuvent s’exécuter en même temps (les processus sont aussi appelés tâches).
+
+Chaque processus donne l’impression d’être seul à utiliser la machine, alors qu’en réalité :
+
+ils partagent les ressources du système
+processeur (CPU)
+mémoire (RAM)
+🔹 Administration des processus
+
+Pour être un bon administrateur Linux, il est important de connaître les commandes permettant de :
+
+lister les processus
+identifier un processus
+terminer (supprimer) un processus
+
+Ces commandes seront abordées dans les prochaines leçons.
+
+La commande ps (Process Status)
+
+La manière la plus courante d’afficher les processus en cours d’exécution sur votre système est d’utiliser la commande ps (abréviation de process status).
+
+Cette commande possède de nombreuses options très utiles, notamment pour le diagnostic et le dépannage système.
+
+🔹 Utilisation de base
+
+Sans aucune option, la commande :
+
+ps
+
+affiche uniquement les processus lancés depuis le terminal (shell) courant.
+
+🔹 Afficher tous les processus
+
+Pour obtenir des informations sur tous les processus du système, utilisez :
+
+ps -A
+🔹 Options les plus utilisées
+
+Les options les plus courantes sont :
+
+ps aux
+
+Ces options permettent d’afficher :
+
+tous les processus (tous utilisateurs confondus)
+le nom de l’utilisateur propriétaire
+la consommation CPU
+l’heure de démarrage
+la commande ayant lancé le processus
+
+💡 En résumé :
+
+ps → processus du terminal courant
+ps -A → tous les processus
+ps aux → vue complète et détaillée (la plus utilisée)
+
+
+
