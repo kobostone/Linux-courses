@@ -1,0 +1,396 @@
+👤 Gestion des utilisateurs 
+
+🔹 1. Créer un utilisateur
+✔️ Méthode recommandée : adduser
+sudo adduser nom_utilisateur
+
+➡️ Crée :
+
+un utilisateur
+un mot de passe
+un dossier personnel (/home/nom_utilisateur)
+
+🔹 2. Supprimer un utilisateur
+✔️ Supprimer l’utilisateur uniquement
+sudo deluser nom_utilisateur
+
+✔️ Supprimer l’utilisateur + son dossier personnel
+sudo deluser --remove-home nom_utilisateur
+
+🔹 3. Modifier un utilisateur
+✔️ Changer le mot de passe
+sudo passwd nom_utilisateur
+
+✔️ Modifier les informations
+sudo usermod options nom_utilisateur
+
+👉 Exemple : ajouter à un groupe
+
+sudo usermod -aG sudo nom_utilisateur
+🔹 4. Les groupes (très important)
+
+Un groupe permet de gérer les droits de plusieurs utilisateurs.
+
+✔️ Ajouter un utilisateur à un groupe
+sudo usermod -aG groupe utilisateur
+
+👉 Exemple :
+
+sudo usermod -aG sudo jwilliams
+
+➡️ Donne les droits administrateur
+
+✔️ Voir les groupes d’un utilisateur
+groups nom_utilisateur
+🔹 5. Droits administrateur (sudo)
+
+👉 Pour donner les droits admin :
+
+sudo usermod -aG sudo utilisateur
+
+➡️ L’utilisateur pourra utiliser :
+
+sudo commande
+🔹 6. Vérifier les utilisateurs
+✔️ Liste des utilisateurs
+cat /etc/passwd
+✔️ Voir l’utilisateur courant
+whoami
+🔹 7. Bonnes pratiques ⚠️
+❌ Ne pas utiliser root directement
+✅ Utiliser sudo
+✅ Créer un compte par utilisateur
+✅ Donner les droits admin seulement si nécessaire
+💡 Résumé rapide
+Action	Commande
+Créer utilisateur	sudo adduser nom
+Supprimer	sudo deluser nom
+Mot de passe	sudo passwd nom
+Ajouter au groupe sudo	sudo usermod -aG sudo nom
+Voir utilisateur courant	whoami
+🧠 Astuce débutant
+
+👉 Pense à ceci :
+
+Utilisateur = identité
+Groupe = permissions
+sudo = pouvoir temporaire
+
+
+🔹 Partie 1 – Gestion des utilisateurs
+✅ Exercice 1 : Créer un utilisateur
+Créer un utilisateur nommé testuser
+Définir un mot de passe
+
+💻 Commande attendue :
+
+sudo adduser testuser
+✅ Exercice 2 : Vérifier l’utilisateur
+Vérifier que l’utilisateur existe
+Afficher les utilisateurs du système
+
+💡 Indice :
+
+cat /etc/passwd
+✅ Exercice 3 : Changer le mot de passe
+
+Changer le mot de passe de testuser
+
+sudo passwd testuser
+✅ Exercice 4 : Ajouter aux droits admin
+
+Donner les droits sudo à testuser
+
+sudo usermod -aG sudo testuser
+✅ Exercice 5 : Tester sudo
+Connecte-toi avec testuser
+Tester une commande admin :
+sudo apt-get update
+🔹 Partie 2 – Gestion des processus
+✅ Exercice 6 : Voir les processus
+
+Afficher les processus en cours
+
+ps aux
+✅ Exercice 7 : Utiliser top
+Lancer :
+top
+Identifier :
+PID
+%CPU
+COMMAND
+Quitter avec :
+q
+✅ Exercice 8 : Lancer un processus long
+sleep 100
+
+➡️ Que se passe-t-il ?
+
+✅ Exercice 9 : Background
+
+Relancer en arrière-plan :
+
+sleep 100 &
+
+➡️ Vérifier avec :
+
+jobs
+✅ Exercice 10 : Suspendre un processus
+Lancer :
+sleep 200
+Appuyer sur :
+Ctrl + Z
+
+➡️ Vérifier :
+
+jobs
+✅ Exercice 11 : Reprendre un processus
+En avant-plan :
+fg
+En arrière-plan :
+bg
+✅ Exercice 12 : Tuer un processus
+Trouver un PID :
+ps aux
+Tuer le processus :
+kill PID
+Forcer si nécessaire :
+kill -9 PID
+🔹 Partie 3 – Bonus (facultatif)
+✅ Exercice 13 : Installer un logiciel
+sudo apt-get install htop
+
+Puis lancer :
+
+htop
+✅ Exercice 14 : Nettoyer le système
+sudo apt-get clean
+🧠 Questions de réflexion
+Quelle différence entre kill et kill -9 ?
+Pourquoi ne faut-il pas utiliser root au quotidien ?
+Quelle différence entre fg et bg ?
+À quoi sert sudo ?
+✅ Validation
+
+Tu maîtrises si tu sais :
+✔ Créer un utilisateur
+✔ Donner les droits sudo
+✔ Voir et gérer les processus
+✔ Utiliser background / foreground
+✔ Installer un paquet
+
+Modifier un utilisateur sous Linux (usermod)
+🔹 1. Qu’est-ce que usermod ?
+
+La commande usermod permet de modifier un utilisateur existant sur Linux.
+
+👉 Elle sert à changer :
+
+le nom de l’utilisateur
+son dossier personnel
+son shell (terminal par défaut)
+ses groupes
+son statut (verrouillé / actif)
+
+➡️ C’est une commande administrateur (sudo).
+
+🔹 2. Syntaxe de base
+sudo usermod [options] nom_utilisateur
+🔹 3. Modifier le nom d’un utilisateur
+✔️ Exemple :
+sudo usermod -l nouveau_nom ancien_nom
+
+👉 Cas concret :
+
+sudo usermod -l jowilliams jwilliams
+
+✔ Résultat :
+
+jwilliams devient jowilliams
+
+⚠️ Attention :
+
+Le dossier /home n’est pas modifié automatiquement
+🔹 4. Modifier le dossier personnel
+sudo usermod -d /home/nouveau_nom -m utilisateur
+
+✔ -d → nouveau dossier
+✔ -m → déplace les fichiers
+
+🔹 5. Modifier le shell par défaut
+sudo usermod -s /bin/bash utilisateur
+
+👉 Exemple :
+
+bash → shell classique
+/usr/sbin/nologin → bloque la connexion
+🔹 6. Ajouter à un groupe
+sudo usermod -aG groupe utilisateur
+
+👉 Exemple :
+
+sudo usermod -aG sudo jowilliams
+
+✔ Donne les droits administrateur
+
+⚠️ Important :
+
+-a = append (ajouter sans supprimer les autres groupes)
+🔹 7. Verrouiller / Déverrouiller un compte
+✔️ Verrouiller (bloquer connexion)
+sudo usermod -L utilisateur
+✔️ Déverrouiller
+sudo usermod -U utilisateur
+🔹 8. Changer le mot de passe
+
+👉 On n’utilise PAS usermod mais passwd
+
+sudo passwd utilisateur
+
+👉 Exemple :
+
+sudo passwd jwilliams
+
+✔ Le système demande :
+
+nouveau mot de passe
+confirmation
+🔹 9. Vérifier les modifications
+id utilisateur
+
+ou
+
+groups utilisateur
+🔹 10. Bonnes pratiques ⚠️
+Toujours utiliser -aG pour ajouter à un groupe
+Ne pas modifier un utilisateur connecté
+Vérifier avant/après avec id
+Attention au changement de nom (impact sur fichiers)
+💡 Résumé rapide
+Action	Commande
+Changer nom	usermod -l nouveau ancien
+Changer home	usermod -d /home/... -m user
+Ajouter groupe	usermod -aG groupe user
+Verrouiller	usermod -L user
+Déverrouiller	usermod -U user
+Mot de passe	passwd user
+🧠 Astuce débutant
+
+👉 Retenir :
+
+usermod = modifier un utilisateur
+passwd = mot de passe
+adduser = créer
+deluser = supprimer
+
+À retenir :
+
+chage = gestion du temps de vie des mots de passe
+passwd = modification du mot de passe
+
+Voici une fiche claire, traduite et optimisée (niveau débutant) sur la gestion des mots de passe avec chage 👇
+
+🔐 Gérer l’expiration des mots de passe (chage)
+🔹 1. Qu’est-ce que chage ?
+
+La commande chage (change age) permet de :
+
+consulter les informations d’expiration d’un mot de passe
+définir des règles de sécurité sur les comptes utilisateurs
+
+👉 Elle est utilisée principalement par l’administrateur (root / sudo)
+
+🔹 2. Voir les informations d’un utilisateur
+✔️ Commande :
+sudo chage -l utilisateur
+
+👉 Exemple :
+
+sudo chage -l bob
+✔️ Résultat typique :
+Last password change (dernier changement)
+Password expires (expiration)
+Password inactive
+Account expires
+Minimum / Maximum days
+
+👉 Explication simple :
+
+Max days = durée de validité du mot de passe
+Min days = délai minimum avant changement
+Warning = alerte avant expiration
+🔹 3. Définir une expiration du mot de passe
+✔️ Exemple : expiration après 30 jours
+sudo chage -M 30 utilisateur
+
+👉 Exemple :
+
+sudo chage -M 30 bob
+
+✔ Résultat :
+➡️ Le mot de passe expire 30 jours après sa création
+
+🔹 4. Définir un avertissement avant expiration
+sudo chage -W 7 utilisateur
+
+✔ Résultat :
+➡️ L’utilisateur est averti 7 jours avant expiration
+
+🔹 5. Définir un délai minimum
+sudo chage -m 2 utilisateur
+
+✔ Résultat :
+➡️ Impossible de changer le mot de passe avant 2 jours
+
+🔹 6. Forcer un changement au prochain login
+sudo chage -d 0 utilisateur
+
+✔ Résultat :
+➡️ L’utilisateur doit changer son mot de passe à la prochaine connexion
+
+🔹 7. Définir une date d’expiration du compte
+sudo chage -E AAAA-MM-JJ utilisateur
+
+👉 Exemple :
+
+sudo chage -E 2026-12-31 bob
+
+✔ Résultat :
+➡️ Le compte sera désactivé après cette date
+
+🔹 8. Désactiver l’expiration du mot de passe
+sudo chage -M -1 utilisateur
+
+✔ Résultat :
+➡️ Mot de passe valable indéfiniment
+
+🔹 9. Exemple complet (cas réel)
+
+👉 Politique de sécurité classique :
+
+sudo chage -M 90 -m 1 -W 7 bob
+
+✔ Résultat :
+
+expiration : 90 jours
+minimum : 1 jour
+alerte : 7 jours
+🔹 10. Bonnes pratiques 🔐
+✅ Forcer l’expiration des mots de passe (30–90 jours)
+✅ Activer les alertes (-W)
+❌ Éviter les mots de passe permanents
+❌ Ne pas utiliser root pour les comptes utilisateurs
+💡 Résumé rapide
+Action	Commande
+Voir infos	chage -l user
+Expiration	chage -M 30 user
+Alerte	chage -W 7 user
+Minimum	chage -m 1 user
+Forcer changement	chage -d 0 user
+Expiration compte	chage -E date user
+
+
+Affichage des informations sur l'utilisateur et les groupes
+Obtenons plus d'informations sur l'utilisateur avec la commande id. C'est un excellent moyen de voir à quels groupes vous appartenez.
+
+Sous Linux, les utilisateurs sont organisés en groupes. Ces groupes déterminent les permissions et les droits d'accès d'un utilisateur.
