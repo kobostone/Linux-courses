@@ -1,4 +1,79 @@
-6.3.1 Points de montage (Mount Points)
+
+👑 Le compte root (superutilisateur)
+
+Le compte root est un utilisateur spécial sous Linux, aussi appelé :
+
+superutilisateur
+administrateur système
+
+👉 C’est le compte le plus puissant du système.
+
+🔹 À quoi sert le compte root ?
+
+Le compte root permet de :
+
+accéder à tous les fichiers sans restriction
+exécuter toutes les commandes
+installer ou supprimer des logiciels
+modifier les permissions et propriétaires des fichiers
+gérer les comptes utilisateurs
+
+👉 En résumé : root peut tout faire sur le système
+
+⚠️ Attention (très important pour débutant)
+
+Il est fortement déconseillé d’utiliser root pour des tâches normales, comme :
+
+naviguer sur Internet
+écrire des documents
+utiliser des logiciels classiques
+
+❗ Pourquoi ?
+
+Une simple erreur (ex : mauvaise commande) peut :
+supprimer des fichiers importants
+casser complètement le système
+🔹 Bonne pratique
+
+👉 Utilisez un compte utilisateur classique pour travailler au quotidien.
+
+👉 Utilisez root uniquement quand c’est nécessaire.
+
+🔹 Obtenir les droits root
+1️⃣ Avec la commande sudo
+sudo commande
+
+➡️ Exécute une commande avec les droits administrateur
+
+2️⃣ Avec la commande su
+su
+
+➡️ Passe en mode root (demande le mot de passe root)
+
+🔹 Exemple concret
+
+Si un utilisateur normal tente une commande système (ex : désactiver une interface réseau), il obtiendra une erreur :
+
+➡️ Permission refusée
+
+👉 Il devra utiliser :
+
+sudo commande
+🔹 Cas particulier : Ubuntu
+
+Sur certaines distributions comme Ubuntu :
+
+le compte root est désactivé par défaut
+on utilise uniquement sudo pour les actions administrateur
+💡 Résumé simple
+root = super utilisateur (tous les droits)
+⚠️ dangereux si mal utilisé
+utiliser un compte normal au quotidien
+sudo = exécuter une commande en admin
+su = devenir root
+
+
+*** 6.3.1 Points de montage (Mount Points)
 
 Chaque périphérique d’entrée/sortie (I/O) contenant un système de fichiers doit être monté, c’est-à-dire associé à un répertoire. Ce répertoire est appelé point de montage. Les fichiers apparaissent alors dans ce répertoire.
 
@@ -305,4 +380,80 @@ kill PID → arrêt propre
 kill -9 PID → arrêt forcé
 Nécessite de connaître le PID (via ps ou top)
 https://geek-university.com/wp-content/images/linux/list_of_kill_signals.jpg
+
+
+
+📦 Le programme tar (Tape Archive)
+
+Le programme tar (abréviation de Tape Archive) est un outil Linux qui permet de regrouper plusieurs fichiers et dossiers en un seul fichier appelé archive.
+
+👉 Ce fichier est souvent appelé :
+
+archive tar
+ou tarball
+
+Les archives .tar sont très utilisées sous Linux pour :
+
+distribuer des logiciels
+sauvegarder des données
+transférer plusieurs fichiers facilement
+🔹 Principe simple (niveau débutant)
+
+👉 tar ne compresse pas les fichiers à la base
+➡️ Il regroupe seulement les fichiers en un seul fichier
+
+💡 Pour compresser, on utilise en plus :
+
+gzip → extension du fichier:  .gz
+bzip2 → extension du fichier: .bz2
+xz →extension du fichier:  .xz
+🔹 Options les plus courantes
+
+Voici les options les plus utilisées avec tar :
+
+Option	Signification
+-c	créer une archive
+-x	extraire une archive
+-v	afficher les fichiers regroupés ou extraits (mode verbeux)
+-f	spécifier le nom du fichier archive
+-z	compresser avec gzip
+-j	compresser avec bzip2
+-J	compresser avec xz
+🔹 Exemples simples
+1️⃣ Créer une archive .tar
+tar -cvf archive.tar results.txt sample.txt
+
+➡️ Cela :
+
+crée une archive appelée archive.tar
+contenant les fichiers results.txt et sample.txt
+2️⃣ Créer une archive compressée (.tar.gz)
+tar -cvzf compress.tgz results.txt sample.txt
+
+➡️ Cela :
+
+crée une archive compressée avec gzip
+nommée compress.tgz (équivalent à .tar.gz)
+3️⃣ Extraire une archive
+tar -xvf archive.tar
+
+➡️ Extrait tous les fichiers dans le dossier courant
+
+4️⃣ Extraire une archive compressée
+tar -xvzf compress.tgz
+
+➡️ Décompresse et extrait les fichiers
+
+🔹 À retenir
+tar = regrouper des fichiers
+gzip / bzip2 / xz = compresser
+.tar.gz = archive + compression
+
+💡 Résumé ultra simple :
+
+Créer : tar -cvf fichier.tar ...
+Compresser : tar -cvzf fichier.tar.gz ...
+Extraire : tar -xvf fichier.tar
+
+
 
